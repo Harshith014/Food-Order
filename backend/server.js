@@ -14,7 +14,7 @@ const app = express();
 app.use(cors());
 
 app.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://food-order-1-co45.onrender.com"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
@@ -25,19 +25,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // --------------------------deployment------------------------------
 
-// const __dirname1 = path.resolve();
-
-// if (process.env.NODE_ENV === "production") {
-//     app.use(express.static(path.join(__dirname1, "./build")));
-
-//     app.get("*", (req, res) =>
-//         res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
-//     );
-// } else {
-//     app.get("/", (req, res) => {
-//         res.send("API is running..");
-//     });
-// }
 app.use(express.static(path.join(__dirname, "build")));
 // --------------------------deployment------------------------------
 
