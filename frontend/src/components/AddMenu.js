@@ -9,6 +9,7 @@ const AddMenu = () => {
     const [price, setPrice] = useState('');
     const [image, setImage] = useState(null);
     const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const token = localStorage.getItem('token');
 
@@ -34,6 +35,13 @@ const AddMenu = () => {
                 config
             );
             // console.log(response.data);
+            setSuccessMessage('Menu has been added successfully');
+
+            // Clear success message after 5 seconds
+            setTimeout(() => {
+                setSuccessMessage('');
+            }, 5000);
+
             setName('');
             setDescription('');
             setPrice('');
@@ -52,6 +60,11 @@ const AddMenu = () => {
     return (
         <div className="add-menu-container">
             <h2>Add Menu</h2>
+            {successMessage && (
+                <div className="success-msg">
+                    <p>{successMessage}</p>
+                </div>
+            )}
             <form onSubmit={handleSubmit} className="add-menu-form">
                 <div className="form-group">
                     <label htmlFor="name">Name:</label>

@@ -24,6 +24,13 @@ const Menu = () => {
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    };
+
     const tokenUser = async () => {
         try {
             if (!token) {
@@ -73,12 +80,6 @@ const Menu = () => {
                 menuItemId: menuItem._id
             };
 
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                }
-            };
 
             const { data } = await axios.post('https://food-order-ovjj.onrender.com/api/cart/addCart', cartData, config);
 
@@ -104,10 +105,17 @@ const Menu = () => {
         setSnackbarOpen(true);
     };
 
-    const handleMenuItemDelete = (menuItemId) => {
-        setMenuItems(menuItems.filter((item) => item._id !== menuItemId));
-        setSnackbarMessage('Menu item deleted successfully!');
-        setSnackbarOpen(true);
+    const handleMenuItemDelete = async (menuItemId) => {
+        try {
+            await axios.delete(`https://food-order-ovjj.onrender.com/api/menu/deleteMenu/${menuItemId}`, config);
+            setSnackbarMessage('Menu item deleted successfully!');
+            setSnackbarOpen(true);
+            // Refetch menu items from the backend
+            const response = await axios.get('https://food-order-ovjj.onrender.com/api/menu/allMenu');
+            setMenuItems(response.data);
+        } catch (error) {
+            console.error('Failed to delete menu item:', error);
+        }
     };
 
     const handleSnackbarClose = () => {
@@ -146,7 +154,7 @@ const Menu = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5 }}
                             >
-                                <Card sx={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                                <Card sx={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', height: '100%' }}> {/* Add height property */}
                                     <Box sx={{ position: 'relative', paddingTop: '56.25%' }}>
                                         <CardMedia
                                             component="img"
@@ -162,7 +170,7 @@ const Menu = () => {
                                             }}
                                         />
                                     </Box>
-                                    <CardContent sx={{ backgroundColor: 'darkgrey' }}>
+                                    <CardContent sx={{ backgroundColor: 'darkgrey', height: '100%' }}> {/* Add height property */}
                                         <Box
                                             sx={{
                                                 backgroundColor: '#f5f5f5',
@@ -171,6 +179,7 @@ const Menu = () => {
                                                 marginBottom: '1rem',
                                                 color: '#333',
                                                 maxWidth: '100%', // Set maximum width to prevent overflow
+                                                height: '100%' // Ensure content fills the entire height
                                             }}
                                         >
                                             <Typography
@@ -212,36 +221,36 @@ const Menu = () => {
                                             >
                                                 Price: ${menuItem.price}
                                             </Typography>
+                                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                                                {!isAdmin && (
+                                                    <Button variant="contained" color="primary" onClick={() => addCart(menuItem)}>
+                                                        Add to Cart
+                                                    </Button>
+                                                )}
+                                                {isAdmin && (
+                                                    <Box>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            onClick={() => setSelectedMenuItemId(menuItem._id)}
+                                                            startIcon={<EditIcon />}
+                                                            sx={{ marginRight: '0.5rem' }}
+                                                        >
+                                                            Update
+                                                        </Button>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="secondary"
+                                                            onClick={() => handleMenuItemDelete(menuItem._id)}
+                                                            startIcon={<DeleteIcon />}
+                                                        >
+                                                            Delete
+                                                        </Button>
+                                                    </Box>
+                                                )}
+                                            </Box>
                                         </Box>
 
-                                        <Box display="flex" justifyContent="space-between" alignItems="center">
-                                            {!isAdmin && (
-                                                <Button variant="contained" color="primary" onClick={() => addCart(menuItem)}>
-                                                    Add to Cart
-                                                </Button>
-                                            )}
-                                            {isAdmin && (
-                                                <Box>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={() => setSelectedMenuItemId(menuItem._id)}
-                                                        startIcon={<EditIcon />}
-                                                        sx={{ marginRight: '0.5rem' }}
-                                                    >
-                                                        Update
-                                                    </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="secondary"
-                                                        onClick={() => handleMenuItemDelete(menuItem._id)}
-                                                        startIcon={<DeleteIcon />}
-                                                    >
-                                                        Delete
-                                                    </Button>
-                                                </Box>
-                                            )}
-                                        </Box>
                                     </CardContent>
                                 </Card>
                             </motion.div>
