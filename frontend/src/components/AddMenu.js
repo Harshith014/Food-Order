@@ -29,7 +29,7 @@ const AddMenu = () => {
             formData.append('image', image);
 
             const response = await axios.post(
-                'http://localhost:5000/api/menu/addMenu',
+                'https://food-order-ovjj.onrender.com/api/menu/addMenu',
                 formData,
                 config
             );

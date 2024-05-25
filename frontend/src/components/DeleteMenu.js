@@ -12,7 +12,7 @@ const DeleteMenu = ({ menuItemId, onDelete }) => {
         },
       };
 
-      await axios.delete(`http://localhost:5000/api/menu/deleteMenu/${menuItemId}`, config);
+      await axios.delete(`https://food-order-ovjj.onrender.com/api/menu/deleteMenu/${menuItemId}`, config);
       onDelete(menuItemId);
     } catch (error) {
       console.error('Failed to delete menu item:', error);

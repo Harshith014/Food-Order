@@ -49,7 +49,7 @@ const Menu = () => {
     useEffect(() => {
         const fetchMenuItems = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/menu/allMenu');
+                const response = await axios.get('https://food-order-ovjj.onrender.com/api/menu/allMenu');
                 setMenuItems(response.data);
                 setLoading(false);
             } catch (error) {
@@ -80,7 +80,7 @@ const Menu = () => {
                 }
             };
 
-            const { data } = await axios.post('http://localhost:5000/api/cart/addCart', cartData, config);
+            const { data } = await axios.post('https://food-order-ovjj.onrender.com/api/cart/addCart', cartData, config);
 
             setOrders([...orders, data.cart]);
             setSnackbarMessage('Item added to cart successfully!');
@@ -150,7 +150,7 @@ const Menu = () => {
                                     <Box sx={{ position: 'relative', paddingTop: '56.25%' }}>
                                         <CardMedia
                                             component="img"
-                                            image={`http://localhost:5000/${menuItem.image}`}
+                                            image={`https://food-order-ovjj.onrender.com/${menuItem.image}`}
                                             alt={menuItem.name}
                                             sx={{
                                                 position: 'absolute',

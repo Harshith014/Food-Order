@@ -29,7 +29,7 @@ const UpdateMenu = ({ menuItem, onUpdate }) => {
 
 
             const response = await axios.put(
-                `http://localhost:5000/api/menu/updateMenu/${menuItem._id}`,
+                `https://food-order-ovjj.onrender.com/api/menu/updateMenu/${menuItem._id}`,
                 formData,
                 config
             );

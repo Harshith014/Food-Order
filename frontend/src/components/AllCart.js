@@ -114,7 +114,7 @@ const AllCarts = () => {
                             'Authorization': token,
                         }
                     };
-                    const response = await axios.get(`http://localhost:5000/api/cart/allCart/${userId}`, config);
+                    const response = await axios.get(`https://food-order-ovjj.onrender.com/api/cart/allCart/${userId}`, config);
                     setCarts(response.data || []);
                 } catch (error) {
                     console.error('Error fetching carts:', error);
@@ -136,7 +136,7 @@ const AllCarts = () => {
                 return;
             }
 
-            await axios.post('http://localhost:5000/api/cart/updateCart', {
+            await axios.post('https://food-order-ovjj.onrender.com/api/cart/updateCart', {
                 userId,
                 menuItemId,
                 action,
@@ -146,7 +146,7 @@ const AllCarts = () => {
                 }
             });
 
-            const response = await axios.get(`http://localhost:5000/api/cart/allCart/${userId}`, {
+            const response = await axios.get(`https://food-order-ovjj.onrender.com/api/cart/allCart/${userId}`, {
                 headers: {
                     'Authorization': token,
                 }
@@ -168,7 +168,7 @@ const AllCarts = () => {
                 return;
             }
 
-            const response = await axios.post('http://localhost:5000/api/order/addOrder', { userId }, {
+            const response = await axios.post('https://food-order-ovjj.onrender.com/api/order/addOrder', { userId }, {
                 headers: {
                     'Authorization': token,
                 }
@@ -177,7 +177,7 @@ const AllCarts = () => {
             setShowSuccessMessage(true); // Show the success message
 
             // Fetch the updated carts after placing the order
-            const responseCarts = await axios.get(`http://localhost:5000/api/cart/allCart/${userId}`, {
+            const responseCarts = await axios.get(`https://food-order-ovjj.onrender.com/api/cart/allCart/${userId}`, {
                 headers: {
                     'Authorization': token,
                 }

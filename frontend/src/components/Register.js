@@ -27,7 +27,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const formDataWithRole = { ...formData, role: 'user' };
-      const response = await axios.post('http://localhost:5000/api/auth/register', formDataWithRole);
+      const response = await axios.post('https://food-order-ovjj.onrender.com/api/auth/register', formDataWithRole);
       // console.log(response.data);
       setFormData({
         email: '',
