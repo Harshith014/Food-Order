@@ -38,7 +38,7 @@ const UserProfile = () => {
 
         const fetchProfile = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/auth/profile/${userId}`, config);
+                const response = await axios.get(`https://food-order-ovjj.onrender.com/api/auth/profile/${userId}`, config);
                 const profileData = response.data;
                 const formattedDateOfBirth = moment(profileData.dateOfBirth).format('YYYY-MM-DD');
                 setProfile({ ...profileData, dateOfBirth: formattedDateOfBirth });
@@ -75,11 +75,11 @@ const UserProfile = () => {
             Object.keys(formData).forEach(key => {
                 formDataObj.append(key, formData[key]);
             });
-            await axios.put(`http://localhost:5000/api/auth/profile/${userId}`, formDataObj, config);
+            await axios.put(`https://food-order-ovjj.onrender.com/api/auth/profile/${userId}`, formDataObj, config);
             setEditMode(false);
 
             // Fetch the updated profile data
-            const response = await axios.get(`http://localhost:5000/api/auth/profile/${userId}`, config);
+            const response = await axios.get(`https://food-order-ovjj.onrender.com/api/auth/profile/${userId}`, config);
             const profileData = response.data;
             const formattedDateOfBirth = moment(profileData.dateOfBirth).format('YYYY-MM-DD');
             setProfile({ ...profileData, dateOfBirth: formattedDateOfBirth });
@@ -133,7 +133,7 @@ const UserProfile = () => {
                                     border: '5px solid #3f51b5',
                                     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
                                 }}
-                                src={`http://localhost:5000/${profile.avatar}`}
+                                src={`https://food-order-ovjj.onrender.com/${profile.avatar}`}
                                 alt="Avatar"
                             />
                         )}
