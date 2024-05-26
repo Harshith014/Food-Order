@@ -89,6 +89,7 @@
   .login-title {
     font-size: 1.3rem;
     margin-bottom: 0.8rem;
+    color: black;
   }
 
   .error-message {

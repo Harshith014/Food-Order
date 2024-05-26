@@ -12,6 +12,7 @@ const Menu = () => {
     const [menuItems, setMenuItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [orders, setOrders] = useState([]);
+    // eslint-disable-next-line no-unused-vars
     const [error, setError] = useState('');
     const [userId, setUserId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -66,6 +67,7 @@ const Menu = () => {
 
         fetchMenuItems();
         tokenUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const addCart = async (menuItem) => {

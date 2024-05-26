@@ -177,6 +177,7 @@ const AllCarts = () => {
             setShowSuccessMessage(true); // Show the success message
 
             // Fetch the updated carts after placing the order
+            // eslint-disable-next-line no-unused-vars
             const responseCarts = await axios.get(`https://food-order-ovjj.onrender.com/api/cart/allCart/${userId}`, {
                 headers: {
                     'Authorization': token,

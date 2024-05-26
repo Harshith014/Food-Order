@@ -27,6 +27,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const formDataWithRole = { ...formData, role: 'user' };
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post('https://food-order-ovjj.onrender.com/api/auth/register', formDataWithRole);
       // console.log(response.data);
       setFormData({
@@ -54,7 +55,7 @@ const Register = () => {
         transition={{ duration: 0.5 }}
       >
         <img src={registerIllustration} alt="Register Illustration" className="register-illustration" />
-        <h2 className="register-title">Register</h2>
+        <h2 className="register-title" style={{ color: 'black' }}>Register</h2>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <form onSubmit={handleSubmit} className="register-form">
           <div className="form-group">
@@ -82,7 +83,7 @@ const Register = () => {
             />
           </div>
           <button type="submit" className="register-button">Register</button>
-          <span className="login-link"><p>Already have an account? <Link to={'/login'}>Login</Link> </p></span>
+          <span className="login-link"><p style={{ color: 'black' }}>Already have an account? <Link to={'/login'}>Login</Link> </p></span>
         </form>
       </motion.div>
     </div>

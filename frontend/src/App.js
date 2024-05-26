@@ -1,6 +1,6 @@
 // src/App.js
 import React from 'react';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
 import AddMenu from './components/AddMenu';
 import AllCart from './components/AllCart';
@@ -10,11 +10,12 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
 import Register from './components/Register';
+import UserProfile from './components/UserProfile';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 
 const MainContent = () => {
   const { theme } = useTheme();
-  
+
   const mainContentStyles = {
     backgroundColor: theme === 'light' ? '#ffffff' : '#333333',
     color: theme === 'light' ? '#000000' : '#ffffff',
@@ -25,12 +26,14 @@ const MainContent = () => {
   return (
     <div style={mainContentStyles}>
       <Routes>
+        <Route path="/" element={<Navigate to="/allmenu" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/allmenu" element={<Menu />} />
         <Route path="/allcart" element={<AllCart />} />
         <Route path="/allorder" element={<AllOrder />} />
         <Route path="/addmenu" element={<AddMenu />} />
+        <Route path="/userprofile" element={<UserProfile />} />
       </Routes>
       <Footer />
     </div>

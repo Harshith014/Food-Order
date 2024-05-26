@@ -29,6 +29,7 @@ const AddMenu = () => {
             formData.append('price', price);
             formData.append('image', image);
 
+            // eslint-disable-next-line no-unused-vars
             const response = await axios.post(
                 'https://food-order-ovjj.onrender.com/api/menu/addMenu',
                 formData,

@@ -92,7 +92,7 @@ const Login = () => {
               />
             </div>
             <button type="submit" className="login-button">Login</button>
-            <span className="register-link"><p>No account? <Link to={'/register'}>Register</Link> </p></span>
+            <span className="register-link"><p style={{ color: 'black' }}>No account? <Link to={'/register'}>Register</Link> </p></span>
           </form>
         }
       </motion.div>

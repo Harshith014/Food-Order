@@ -7,7 +7,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
-const pages = ['Allmenu', 'Allorder', 'Allcart'];
+const pages = ['Allmenu', 'Allorder', 'Allcart', 'userprofile'];
 
 export default function Navbar() {
   const token = localStorage.getItem('token');
