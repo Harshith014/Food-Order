@@ -1,7 +1,7 @@
 const express = require('express');
 const MenuItem = require('../models/menuModel');
 const path = require('path');
-
+const cloudinary = require('../middleware/cloudinary');
 
 // Get all menu items (no authentication required)
 exports.allMenu = async (req, res) => {
@@ -17,51 +17,55 @@ exports.allMenu = async (req, res) => {
 exports.addMenu = async (req, res) => {
     try {
         if (req.user.role === 'admin') {
-            // Check if an image file was uploaded
-
-            // Extract data from the request body
             const { name, description, price } = req.body;
-            const image = req.file ? req.file.path : null;
+            let imageUrl = null;
+
+            // Upload the image to Cloudinary if included in the request
+            if (req.file) {
+                const result = await cloudinary.uploader.upload(req.file.path);
+                imageUrl = result.secure_url;
+            }
 
             // Create a new MenuItem instance
             const newItem = new MenuItem({
                 name,
                 description,
                 price,
-                image // Store the image path in the database
+                image: imageUrl // Store the Cloudinary image URL in the database
             });
 
             // Save the new menu item to the database
             const savedItem = await newItem.save();
             res.status(201).json(savedItem);
         } else {
-            // If the user is not an admin, return unauthorized error
             res.status(401).json({ error: 'User is not an admin' });
         }
     } catch (error) {
-        // If any error occurs, return unauthorized error
         res.status(401).json({ error: 'Unauthorized' });
     }
 };
 
-// Update a menu item (requires authentication)
 exports.updateMenu = async (req, res) => {
     try {
         if (req.user.role === 'admin') {
             const { name, description, price } = req.body;
-            const image = req.file ? req.file.path : null;
-            const updatedItem = await MenuItem.findByIdAndUpdate(req.params.id, {
-                name,
-                description,
-                price,
-                image // Store the image path in the database
-            }, { new: true });
-            res.json(updatedItem);
+            let imageUrl = null;
 
+            // Upload the image to Cloudinary if included in the request
+            if (req.file) {
+                const result = await cloudinary.uploader.upload(req.file.path);
+                imageUrl = result.secure_url;
+            }
+
+            const updatedItem = await MenuItem.findByIdAndUpdate(
+                req.params.id,
+                { name, description, price, image: imageUrl }, // Store the Cloudinary image URL in the database
+                { new: true }
+            );
+            res.json(updatedItem);
         } else {
             res.status(401).json({ error: 'User is not an admin' });
         }
-
     } catch (error) {
         res.status(401).json({ error: 'Unauthorized' });
     }

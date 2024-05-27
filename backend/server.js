@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoute');
@@ -7,7 +8,7 @@ const orderRoutes = require('./routes/orderRoute');
 const cartRoutes = require('./routes/cartRoute');
 const cors = require('cors');
 const path = require('path');
-require('dotenv').config();
+const cloudinary = require('./middleware/cloudinary')
 
 const app = express();
 

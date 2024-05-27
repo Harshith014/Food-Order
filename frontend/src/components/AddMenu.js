@@ -59,7 +59,7 @@ const AddMenu = () => {
     };
 
     return (
-        <div className="add-menu-container">
+        <div className="add-menu-container" style={{ color: 'black' }}>
             <h2>Add Menu</h2>
             {successMessage && (
                 <div className="success-msg">

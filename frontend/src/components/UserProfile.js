@@ -133,7 +133,7 @@ const UserProfile = () => {
                                     border: '5px solid #3f51b5',
                                     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
                                 }}
-                                src={`https://food-order-ovjj.onrender.com/${profile.avatar}`}
+                                src={profile.avatar}
                                 alt="Avatar"
                             />
                         )}

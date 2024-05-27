@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
+const cloudinary = require('../middleware/cloudinary');
 require('dotenv').config();
 
 
@@ -66,35 +67,34 @@ exports.login = async (req, res) => {
 exports.updateProfile = async (req, res) => {
     const userId = req.params.userId;
     const updates = req.body;
-    const avatar = req.file ? req.file.path : null;
+    let avatarUrl = null;
 
     try {
         // Check if the user exists
         const user = await User.findById(userId);
-
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Update avatar if included in the request
-        if (avatar) {
-            user.avatar = avatar;
+        // Upload the avatar image to Cloudinary if included in the request
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path);
+            avatarUrl = result.secure_url;
+            user.avatar = avatarUrl;
         }
 
-        // Update user information
+        // Update password if included in updates
         if (updates.password) {
-            // If password is included in updates, hash it before updating
             updates.password = await bcrypt.hash(updates.password, 10);
         }
 
-        // Update only the fields that are provided in the request body
+        // Update user information
         Object.keys(updates).forEach(key => {
             user[key] = updates[key];
         });
 
         // Save the updated user information
         await user.save();
-
         res.status(200).json({ message: 'User profile updated successfully' });
     } catch (error) {
         console.error(error);

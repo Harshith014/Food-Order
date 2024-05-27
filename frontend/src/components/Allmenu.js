@@ -160,7 +160,7 @@ const Menu = () => {
                                     <Box sx={{ position: 'relative', paddingTop: '56.25%' }}>
                                         <CardMedia
                                             component="img"
-                                            image={`https://food-order-ovjj.onrender.com/${menuItem.image}`}
+                                            image={menuItem.image}
                                             alt={menuItem.name}
                                             sx={{
                                                 position: 'absolute',
