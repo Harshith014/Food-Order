@@ -57,7 +57,7 @@ const Menu = () => {
     useEffect(() => {
         const fetchMenuItems = async () => {
             try {
-                const response = await axios.get('https://food-order-ovjj.onrender.com/api/menu/allMenu');
+                const response = await axios.get(`${process.env.REACT_APP_URI}/api/menu/allMenu`);
                 setMenuItems(response.data);
                 setLoading(false);
             } catch (error) {
@@ -83,7 +83,7 @@ const Menu = () => {
             };
 
 
-            const { data } = await axios.post('https://food-order-ovjj.onrender.com/api/cart/addCart', cartData, config);
+            const { data } = await axios.post(`${process.env.REACT_APP_URI}/api/cart/addCart`, cartData, config);
 
             setOrders([...orders, data.cart]);
             setSnackbarMessage('Item added to cart successfully!');
@@ -109,11 +109,11 @@ const Menu = () => {
 
     const handleMenuItemDelete = async (menuItemId) => {
         try {
-            await axios.delete(`https://food-order-ovjj.onrender.com/api/menu/deleteMenu/${menuItemId}`, config);
+            await axios.delete(`${process.env.REACT_APP_URI}/api/menu/deleteMenu/${menuItemId}`, config);
             setSnackbarMessage('Menu item deleted successfully!');
             setSnackbarOpen(true);
             // Refetch menu items from the backend
-            const response = await axios.get('https://food-order-ovjj.onrender.com/api/menu/allMenu');
+            const response = await axios.get(`${process.env.REACT_APP_URI}/api/menu/allMenu`);
             setMenuItems(response.data);
         } catch (error) {
             console.error('Failed to delete menu item:', error);

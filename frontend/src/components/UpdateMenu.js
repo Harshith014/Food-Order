@@ -29,7 +29,7 @@ const UpdateMenu = ({ menuItem, onUpdate }) => {
 
 
             const response = await axios.put(
-                `https://food-order-ovjj.onrender.com/api/menu/updateMenu/${menuItem._id}`,
+                `${process.env.REACT_APP_URI}/api/menu/updateMenu/${menuItem._id}`,
                 formData,
                 config
             );

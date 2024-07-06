@@ -31,7 +31,7 @@ const AddMenu = () => {
 
             // eslint-disable-next-line no-unused-vars
             const response = await axios.post(
-                'https://food-order-ovjj.onrender.com/api/menu/addMenu',
+                `${process.env.REACT_APP_URI}/api/menu/addMenu`,
                 formData,
                 config
             );

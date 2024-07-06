@@ -26,7 +26,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://food-order-ovjj.onrender.com/api/auth/login', formData);
+      const response = await axios.post(`${process.env.REACT_APP_URI}/api/auth/login`, formData);
       // console.log(response.data); // Assuming the backend returns a token upon successful login
       setFormData({
         email: '',

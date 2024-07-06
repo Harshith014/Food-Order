@@ -28,7 +28,7 @@ const Register = () => {
     try {
       const formDataWithRole = { ...formData, role: 'user' };
       // eslint-disable-next-line no-unused-vars
-      const response = await axios.post('https://food-order-ovjj.onrender.com/api/auth/register', formDataWithRole);
+      const response = await axios.post(`${process.env.REACT_APP_URI}/api/auth/register`, formDataWithRole);
       // console.log(response.data);
       setFormData({
         email: '',

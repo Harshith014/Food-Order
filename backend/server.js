@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+
 const authRoutes = require('./routes/authRoute');
 const db = require('./db');
 const menuRoutes = require('./routes/menuRoutes');
@@ -8,14 +8,14 @@ const orderRoutes = require('./routes/orderRoute');
 const cartRoutes = require('./routes/cartRoute');
 const cors = require('cors');
 const path = require('path');
-const cloudinary = require('./middleware/cloudinary')
+
 
 const app = express();
 
 app.use(cors());
 
 app.use(cors({
-    origin: ["https://food-order-1-co45.onrender.com"],
+    origin: [process.env.URI],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));

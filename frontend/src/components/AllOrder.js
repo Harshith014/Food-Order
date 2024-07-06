@@ -43,7 +43,7 @@ const AllOrder = () => {
                             'Authorization': token,
                         }
                     };
-                    const response = await axios.get(`https://food-order-ovjj.onrender.com/api/order/allOrder/${userId}`, config);
+                    const response = await axios.get(`${process.env.REACT_APP_URI}/api/order/allOrder/${userId}`, config);
                     setOrders(response.data.orders);
                 } catch (error) {
                     console.error('Failed to fetch orders:', error);

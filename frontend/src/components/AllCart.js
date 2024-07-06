@@ -114,7 +114,7 @@ const AllCarts = () => {
                             'Authorization': token,
                         }
                     };
-                    const response = await axios.get(`https://food-order-ovjj.onrender.com/api/cart/allCart/${userId}`, config);
+                    const response = await axios.get(`${process.env.REACT_APP_URI}/api/cart/allCart/${userId}`, config);
                     setCarts(response.data || []);
                 } catch (error) {
                     console.error('Error fetching carts:', error);
@@ -136,7 +136,7 @@ const AllCarts = () => {
                 return;
             }
 
-            await axios.post('https://food-order-ovjj.onrender.com/api/cart/updateCart', {
+            await axios.post(`${process.env.REACT_APP_URI}/api/cart/updateCart`, {
                 userId,
                 menuItemId,
                 action,
@@ -146,7 +146,7 @@ const AllCarts = () => {
                 }
             });
 
-            const response = await axios.get(`https://food-order-ovjj.onrender.com/api/cart/allCart/${userId}`, {
+            const response = await axios.get(`${process.env.REACT_APP_URI}/api/cart/allCart/${userId}`, {
                 headers: {
                     'Authorization': token,
                 }
@@ -168,7 +168,7 @@ const AllCarts = () => {
                 return;
             }
 
-            const response = await axios.post('https://food-order-ovjj.onrender.com/api/order/addOrder', { userId }, {
+            const response = await axios.post(`${process.env.REACT_APP_URI}/api/order/addOrder`, { userId }, {
                 headers: {
                     'Authorization': token,
                 }
@@ -178,7 +178,7 @@ const AllCarts = () => {
 
             // Fetch the updated carts after placing the order
             // eslint-disable-next-line no-unused-vars
-            const responseCarts = await axios.get(`https://food-order-ovjj.onrender.com/api/cart/allCart/${userId}`, {
+            const responseCarts = await axios.get(`${process.env.REACT_APP_URI}/api/cart/allCart/${userId}`, {
                 headers: {
                     'Authorization': token,
                 }
