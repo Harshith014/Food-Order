@@ -1,6 +1,7 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EmailIcon from '@mui/icons-material/Email';
-import { Avatar, Box, Button, Container, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Container, Grid, IconButton, InputAdornment, Paper, TextField, Typography } from '@mui/material';
+import { styled } from '@mui/system';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import moment from 'moment';
@@ -9,8 +10,22 @@ import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { BsPencilSquare } from 'react-icons/bs';
 import { useTheme } from '../context/ThemeContext'; // Adjust the import path if necessary
 
+// Styled components
+const StyledPaper = styled(Paper)(({ theme }) => ({
+    padding: theme.spacing(3),
+    textAlign: 'center',
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .3)',
+}));
+
+const LoginMessage = styled(Typography)(({ theme }) => ({
+    color: theme.palette.text.primary,
+    fontWeight: 500,
+}));
 const UserProfile = () => {
     const { theme } = useTheme();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userId, setUserId] = useState('');
     const [profile, setProfile] = useState({});
     const [editMode, setEditMode] = useState(false);
@@ -23,34 +38,44 @@ const UserProfile = () => {
         avatar: null
     });
 
-    const token = localStorage.getItem('token');
-    const config = {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: token
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                setUserId(decodedToken.userId);
+                setIsLoggedIn(true);
+            } catch (error) {
+                console.error('Invalid token:', error);
+                setIsLoggedIn(false);
+            }
+        } else {
+            setIsLoggedIn(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
-        const decodedToken = jwtDecode(token);
-        const userId = decodedToken.userId;
-        setUserId(userId);
+        if (isLoggedIn && userId) {
+            const fetchProfile = async () => {
+                try {
+                    const config = {
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        }
+                    };
+                    const response = await axios.get(`${process.env.REACT_APP_URI}/api/auth/profile/${userId}`, config);
+                    const profileData = response.data;
+                    const formattedDateOfBirth = moment(profileData.dateOfBirth).format('YYYY-MM-DD');
+                    setProfile({ ...profileData, dateOfBirth: formattedDateOfBirth });
+                    setFormData({ ...profileData, dateOfBirth: formattedDateOfBirth });
+                } catch (error) {
+                    console.error('Error fetching user profile:', error);
+                }
+            };
 
-        const fetchProfile = async () => {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_URI}/api/auth/profile/${userId}`, config);
-                const profileData = response.data;
-                const formattedDateOfBirth = moment(profileData.dateOfBirth).format('YYYY-MM-DD');
-                setProfile({ ...profileData, dateOfBirth: formattedDateOfBirth });
-                setFormData({ ...profileData, dateOfBirth: formattedDateOfBirth });
-            } catch (error) {
-                console.error('Error fetching user profile:', error);
-            }
-        };
-
-        fetchProfile();
-        // eslint-disable-next-line
-    }, []);
+            fetchProfile();
+        }
+    }, [isLoggedIn, userId]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -75,6 +100,12 @@ const UserProfile = () => {
             Object.keys(formData).forEach(key => {
                 formDataObj.append(key, formData[key]);
             });
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': localStorage.getItem('token')
+                }
+            };
             await axios.put(`${process.env.REACT_APP_URI}/api/auth/profile/${userId}`, formDataObj, config);
             setEditMode(false);
 
@@ -108,6 +139,18 @@ const UserProfile = () => {
             },
         },
     };
+
+    if (!isLoggedIn) {
+        return (
+            <Container maxWidth="sm" sx={{ paddingTop: '50px' }}>
+                <StyledPaper elevation={3}>
+                    <LoginMessage variant="h5" gutterBottom>
+                        Login to access all features
+                    </LoginMessage>
+                </StyledPaper>
+            </Container>
+        );
+    }
 
     return (
         <Container maxWidth="md" sx={{ paddingTop: '50px' }}>
