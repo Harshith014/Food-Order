@@ -7,6 +7,7 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled(Box)(({ theme }) => ({
     padding: theme.spacing(4),
@@ -78,6 +79,7 @@ const NoCartsMessage = styled(Typography)(({ theme }) => ({
 }));
 
 const AllCarts = () => {
+    const navigate = useNavigate();
     const [carts, setCarts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [orderMessage, setOrderMessage] = useState('');
@@ -168,28 +170,8 @@ const AllCarts = () => {
                 return;
             }
 
-            const response = await axios.post(`${process.env.REACT_APP_URI}/api/order/addOrder`, { userId }, {
-                headers: {
-                    'Authorization': token,
-                }
-            });
-            setOrderMessage(response.data.message);
-            setShowSuccessMessage(true); // Show the success message
-
-            // Fetch the updated carts after placing the order
-            // eslint-disable-next-line no-unused-vars
-            const responseCarts = await axios.get(`${process.env.REACT_APP_URI}/api/cart/allCart/${userId}`, {
-                headers: {
-                    'Authorization': token,
-                }
-            });
-
-            // Hide the success message and empty the cart after 30 seconds
-            setTimeout(() => {
-                setShowSuccessMessage(false);
-                setOrderMessage('Oops! There are no carts available');
-                setCarts([]);
-            }, 30000);
+            // Instead of immediately placing the order, redirect to the payment page
+            navigate(`/payment?amount=${totalCartPrice.toFixed(2)}&userId=${userId}`);
 
         } catch (error) {
             console.error('Error placing order:', error);

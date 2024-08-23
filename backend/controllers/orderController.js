@@ -19,12 +19,10 @@ exports.addOrder = async (req, res) => {
     const menuItemNames = await Promise.all(
       cart.items.map(async (item) => {
         const menuItem = await MenuItem.findById(item.menuItemId);
-
         return menuItem.name;
       })
     );
 
- 
 
     // Create a new order
     const order = new Order({
@@ -38,7 +36,6 @@ exports.addOrder = async (req, res) => {
       totalPrice: cart.totalPrice,
       orderDate: new Date(),
       status: 'confirmed',
-
     });
 
     // Save the order
@@ -62,7 +59,6 @@ exports.addOrder = async (req, res) => {
 exports.allOrder = async (req, res) => {
   try {
     const userId = req.params.userId;
-
     const orders = await Order.find({ userId });
 
     res.status(200).json({ orders });
