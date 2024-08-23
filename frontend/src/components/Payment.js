@@ -39,7 +39,7 @@ const Payment = () => {
                 throw new Error(error.message);
             }
 
-            const { data } = await axios.post('http://localhost:5000/api/payment', {
+            const { data } = await axios.post(`${process.env.REACT_APP_URI}/api/payment`, {
                 amount: Math.round(parseFloat(amount) * 100), // Convert to cents
                 paymentMethodId: paymentMethod.id,
                 userId: userId
