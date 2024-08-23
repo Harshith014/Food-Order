@@ -9,6 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 const Container = styled(Box)(({ theme }) => ({
     padding: theme.spacing(4),
     backgroundColor: theme.palette.background.default,
@@ -116,7 +117,7 @@ const AllCarts = () => {
                             'Authorization': token,
                         }
                     };
-                    const response = await axios.get(`${process.env.REACT_APP_URI}/api/cart/allCart/${userId}`, config);
+                    const response = await axios.get(`http://localhost:5000/api/cart/allCart/${userId}`, config);
                     setCarts(response.data || []);
                 } catch (error) {
                     console.error('Error fetching carts:', error);
