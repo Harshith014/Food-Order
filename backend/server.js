@@ -8,7 +8,7 @@ const orderRoutes = require('./routes/orderRoute');
 const cartRoutes = require('./routes/cartRoute');
 const cors = require('cors');
 const path = require('path');
-
+const stripe = require('stripe')(process.env.STRIPE_API_SECRET_KEY);
 
 const app = express();
 
@@ -37,6 +37,27 @@ app.use('/api/cart', cartRoutes);
 
 // Database Connection
 db();
+
+const calculateTotalOrderAmount = (items) => {
+    return items[0].amount * 100;
+};
+
+app.post("/create-payment-intent", async (req, res) => {
+    const { items } = req.body;
+
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: calculateTotalOrderAmount(items),
+        currency: "usd",
+        description: "This is for GFG Stripe API Demo",
+        automatic_payment_methods: {
+            enabled: true,
+        },
+    });
+
+    res.send({
+        clientSecret: paymentIntent.client_secret,
+    });
+});
 
 // Start Server
 const PORT = process.env.PORT || 5000;

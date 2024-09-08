@@ -30,6 +30,8 @@ exports.addCart = async (req, res) => {
                 menuItemId: menuItemId,
                 quantity: 1,
                 price: menuItem.price,
+                name: menuItem.name, // Add the name of the menu item
+                image: menuItem.image, // Add the image of the menu item
             });
         }
 
@@ -133,6 +135,43 @@ exports.updateCartItem = async (req, res) => {
         await cart.save();
 
         res.status(200).json({ message: 'Cart updated successfully', cart });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+// deleteCartItem: Delete a menu item from the user's cart
+exports.deleteCartItem = async (req, res) => {
+    try {
+        const { userId, menuItemId } = req.body;
+
+        // Find the user's cart
+        const cart = await Cart.findOne({ userId });
+
+        // Check if the cart exists
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        // Find the cart item
+        const cartItemIndex = cart.items.findIndex((item) => item.menuItemId.equals(menuItemId));
+
+        // Check if the cart item exists
+        if (cartItemIndex === -1) {
+            return res.status(404).json({ message: 'Item not found in the cart' });
+        }
+
+        // Remove the item from the cart
+        cart.items.splice(cartItemIndex, 1);
+
+        // Recalculate the total price
+        cart.totalPrice = cart.items.reduce((total, item) => total + item.price * item.quantity, 0);
+
+        // Save the updated cart
+        await cart.save();
+
+        res.status(200).json({ message: 'Item deleted from cart successfully' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Internal server error' });

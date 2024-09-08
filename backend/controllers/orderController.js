@@ -8,7 +8,7 @@ exports.addOrder = async (req, res) => {
     const { userId } = req.body;
 
     // Find the user's cart
-    const cart = await Cart.findOne({ userId });
+    const cart = await Cart.findOne({ userId }).lean();
 
     // Check if the cart exists and has items
     if (!cart || cart.items.length === 0) {
@@ -19,12 +19,9 @@ exports.addOrder = async (req, res) => {
     const menuItemNames = await Promise.all(
       cart.items.map(async (item) => {
         const menuItem = await MenuItem.findById(item.menuItemId);
-
         return menuItem.name;
       })
     );
-
- 
 
     // Create a new order
     const order = new Order({
@@ -38,16 +35,13 @@ exports.addOrder = async (req, res) => {
       totalPrice: cart.totalPrice,
       orderDate: new Date(),
       status: 'confirmed',
-
     });
 
     // Save the order
     await order.save();
 
     // Clear the user's cart
-    cart.items = [];
-    cart.totalPrice = 0;
-    await cart.save();
+    await Cart.updateOne({ userId }, { $set: { items: [], totalPrice: 0 } });
 
     res.status(201).json({ message: 'Order placed successfully', order });
   } catch (err) {

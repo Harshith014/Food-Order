@@ -3,15 +3,31 @@ const MenuItem = require('../models/menuModel');
 const path = require('path');
 const cloudinary = require('../middleware/cloudinary');
 
+
 // Get all menu items (no authentication required)
 exports.allMenu = async (req, res) => {
     try {
-        const menuItems = await MenuItem.find();
-        res.json(menuItems);
+        const page = parseInt(req.query.page) || 1;  // Default to page 1 if not provided
+        const pageSize = parseInt(req.query.pageSize) || 10;  // Default page size to 10 if not provided
+
+        // Calculate the number of items to skip based on the current page
+        const skip = (page - 1) * pageSize;
+
+        // Get the total count of menu items
+        const totalItems = await MenuItem.countDocuments();
+
+        // Fetch the menu items with pagination
+        const menuItems = await MenuItem.find()
+            .skip(skip)
+            .limit(pageSize);
+
+        // Send the menu items and the total number of items
+        res.json({ menuItems, totalItems });
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 // Create a new menu item (requires authentication)
 exports.addMenu = async (req, res) => {
