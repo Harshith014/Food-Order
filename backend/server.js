@@ -15,7 +15,7 @@ const app = express();
 app.use(cors());
 
 app.use(cors({
-    origin: [process.env.URI],
+    origin: [process.env.VITE_REACT_APP_URI],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
