@@ -12,13 +12,20 @@ const stripe = require('stripe')(process.env.STRIPE_API_SECRET_KEY);
 
 const app = express();
 
-app.use(cors());
 
 app.use(cors({
     origin: [process.env.URI],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
+
+// Set custom CORS headers explicitly
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', process.env.URI); // Allow your frontend domain
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
 
 // Middleware
 app.use(express.json());
