@@ -1,4 +1,3 @@
-Here’s a professional README for your **Food Order Web Application** repository:
 
 ---
 

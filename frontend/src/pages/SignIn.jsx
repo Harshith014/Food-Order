@@ -12,6 +12,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../assets/restaurant.jpg";
+import LoadingComponent from "../components/Loading";
 import { AuthContext } from "../context/UserContext";
 
 const theme = createTheme({
@@ -29,6 +30,7 @@ const theme = createTheme({
 });
 
 const SignInPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -39,6 +41,7 @@ const SignInPage = () => {
   const handleSignIn = async (e) => {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
 
     try {
       const response = await axios.post(
@@ -56,6 +59,8 @@ const SignInPage = () => {
       setError(
         error.response?.data?.message || "An unexpected error occurred."
       );
+    } finally {
+      setIsLoading(false); // Set loading status to false when API request is complete
     }
   };
 
@@ -129,101 +134,91 @@ const SignInPage = () => {
             >
               Sign In
             </Typography>
+      
             <Box component="form" onSubmit={handleSignIn} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                sx={{
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: "4px",
-                  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                  // Add mobile-specific styles
-                  [theme.breakpoints.down("sm")]: {
-                    fontSize: "14px",
-                  },
-                }}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                sx={{
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: "4px",
-                  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                  // Add mobile-specific styles
-
-                  [theme.breakpoints.down("sm")]: {
-                    fontSize: "14px",
-                  },
-                }}
-              />
-              {error && (
-                <Alert severity="error" sx={{ mt: 2, fontSize: "14px" }}>
-                  {error}
-                </Alert>
+              {isLoading ? (
+                <LoadingComponent /> // Render LoadingComponent when API request is pending
+              ) : (
+                <>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    sx={{
+                      backgroundColor: "#FFFFFF",
+                      borderRadius: "4px",
+                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    sx={{
+                      backgroundColor: "#FFFFFF",
+                      borderRadius: "4px",
+                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
+                  />
+                  {error && (
+                    <Alert severity="error" sx={{ mt: 2, fontSize: "14px" }}>
+                      {error}
+                    </Alert>
+                  )}
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      mt: 3,
+                      mb: 2,
+                      backgroundColor: "#E53935",
+                      color: "#FFF",
+                      "&:hover": {
+                        backgroundColor: "#d32f2f",
+                      },
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      mt: 2,
+                      fontSize: "14px",
+                    }}
+                  >
+                    No account?{" "}
+                    <Link
+                      to="/signup"
+                      style={{
+                        color: "#E53935",
+                        textDecoration: "none",
+                        fontSize: "14px",
+                      }}
+                    >
+                      SignUp
+                    </Link>
+                  </Typography>
+                </>
               )}
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                sx={{
-                  mt: 3,
-                  mb: 2,
-                  backgroundColor: "#E53935",
-                  color: "#FFF",
-                  "&:hover": {
-                    backgroundColor: "#d32f2f",
-                  },
-                  // Add mobile-specific styles
-                  [theme.breakpoints.down("sm")]: {
-                    padding: "10px",
-                    fontSize: "14px",
-                  },
-                }}
-              >
-                Sign In
-              </Button>
-              <Typography
-                variant="body2"
-                sx={{
-                  mt: 2,
-                  fontSize: "14px",
-                  // Add mobile-specific styles
-                  [theme.breakpoints.down("sm")]: {
-                    fontSize: "12px",
-                  },
-                }}
-              >
-                No account?{" "}
-                <Link
-                  to="/signup"
-                  style={{
-                    color: "#E53935",
-                    textDecoration: "none",
-                    fontSize: "14px",
-                  }}
-                >
-                  SignUp
-                </Link>
-              </Typography>
             </Box>
+
           </Box>
         </Container>
       </Box>
